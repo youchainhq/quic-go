@@ -6,9 +6,15 @@ set -e
 
 echo "Using commit:" `cat commit.txt`
 
+echo "Starting tcpdump"
+nohup tcpdump -i eth0 -w /logs/eth0.pcap &
+echo "Started tcpdump"
+
 if [ "$ROLE" == "client" ]; then
     # Wait for the simulator to start up.
-    /wait-for-it.sh sim:57832 -s -t 10
+    TIMEOUT=3000
+    echo "Waiting $TIMEOUT seconds for the simulator"
+    wait-for-it 193.167.0.2:57832 -s -t $TIMEOUT
     echo "Starting QUIC client..."
     echo "Client params: $CLIENT_PARAMS"
     echo "Test case: $TESTCASE"

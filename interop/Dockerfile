@@ -27,6 +27,9 @@ FROM martenseemann/quic-network-simulator-endpoint:latest
 
 WORKDIR /quic-go
 
+RUN apt-get install -y tshark nmap tcpdump python python-pip
+RUN pip install wait-for-it
+
 COPY --from=builder /quic-go/commit.txt /quic-go/server /quic-go/client ./
 
 COPY run_endpoint.sh .
